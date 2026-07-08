@@ -18,7 +18,7 @@ Tex.set_default(color = black_color)
 MathTex.set_default(color = black_color)
 Dot.set_default(color = black_color)
 
-class Flash(Slide):
+class Bienal(Slide):
 
     def fadeout_all(self, **kwargs):
         """Fade out all the currents objects from screen"""
@@ -48,11 +48,15 @@ class Flash(Slide):
         #                  TITLE SCREEN
         # -----------------------------------------------
         
-        doctoral_days = Text("Doctoral Days. March 13, 2025").scale(1.1).to_edge(UP, buff = 0.5)
-        title = Text(r"Floquet Theory applied to Lindbladian Open Quantum Systems")
+        # banner = Text("XL Bienal de la RSEF").scale(1.1).to_edge(UP, buff = 0.5)
+        banner = ImageMobject("./assets/banner_bienal.jpg").scale_to_fit_width(screen_width).to_edge(UP, buff = 0)
+        title = VGroup(
+            Text(r"Does The Stroboscopic Lindbladian Exist?"),
+            Text(r"An Analytical Approach")
+        ).arrange(DOWN, buff = 0.3)
         authors = VGroup(
             Text(r"Antonio de la M. Sojo López").scale(0.7),
-            Text(r"Supervisor: Jesús Casado Pascual").scale(0.7)
+            Text(r"Jesús Casado Pascual").scale(0.7)
         ).arrange(DOWN, buff = 0.15)
 
         # Logos 'n' stuff
@@ -74,7 +78,7 @@ class Flash(Slide):
         title_screen = VGroup(
             title,
             authors,
-        ).scale_to_fit_width(0.85*screen_width).arrange(DOWN, buff=0.35)
+        ).scale_to_fit_width(0.6*screen_width).arrange(DOWN, buff=0.35)
         authors.shift(0.15*DOWN)
         banners.to_edge(DOWN, buff = 0.5)
 
@@ -82,7 +86,7 @@ class Flash(Slide):
             Write(title)
         )
         self.play(
-            FadeIn(doctoral_days, shift = DOWN),
+            FadeIn(banner, shift = DOWN),
             Write(authors),
             FadeIn(banners, shift = UP)
         )
@@ -230,11 +234,11 @@ class Flash(Slide):
         self.next_slide()
         self.remove_all()
 
-        title_problem = Title("Is the Floquet Generator a Lindbladian?")
+        title_problem = Title(r'Is the Floquet Generator $\mathcal{G}$ a Lindbladian?')
         title_problem.underline.color = black_color
 
         cptp_rect = Rectangle(height = 5.5, width = 9, color = blue_color, fill_color = blue_color, fill_opacity=0.1)
-        cptp_title = Tex(r"CPTP", color = blue_color).scale_to_fit_height(0.35).move_to(cptp_rect.get_top() + 0.35*DOWN)
+        cptp_title = Tex(r"$\mathcal{E}$ is CPTP", color = blue_color).scale_to_fit_height(0.35).move_to(cptp_rect.get_top() + 0.35*DOWN)
         cptp_rect.set_z_index(1)
         cptp_title.set_z_index(1)
         cptp_set = VGroup(
@@ -244,7 +248,7 @@ class Flash(Slide):
 
         linbladian_rect = Rectangle(height = 4.25, width = 0.6*11, color = yellow_color, fill_color = yellow_color, fill_opacity=0.1)\
             .shift(cptp_rect.width/8*RIGHT+0.5*DOWN)
-        linbladian_title = Tex(r"Lindbladian $\mathcal{L}$", color = yellow_color).scale_to_fit_height(0.35).move_to(linbladian_rect.get_top() + 0.35*DOWN)
+        linbladian_title = Tex(r"$\mathcal{G}$ is Lindbladian", color = yellow_color).scale_to_fit_height(0.35).move_to(linbladian_rect.get_top() + 0.35*DOWN)
         linbladian_rect.set_z_index(2)
         linbladian_title.set_z_index(2)
         linbladian_set = VGroup(
@@ -255,8 +259,8 @@ class Flash(Slide):
         TD_rect = Rectangle(height = 3, width = 0.25*11, color = green_color, fill_color = green_color, fill_opacity=0.1)\
             .shift(cptp_rect.width/8*RIGHT-linbladian_rect.width/4*RIGHT+1*DOWN)
         TD_title = VGroup(
-            Tex(r"Non-Constant Gen.", color = green_color).scale(0.85),
-            MathTex(r"\mathcal{T}e^{\int d\tau\mathcal{L}(\tau)}", color = green_color)
+            Tex(r"Non-Constant Gen.", color = green_color).scale(0.8),
+            MathTex(r"\mathcal{E}=\mathcal{T}e^{\int d\tau\mathcal{G}(\tau)}", color = green_color).scale(0.9)
         ).arrange(DOWN, buff = 0.2).scale_to_fit_height(0.8).scale_to_fit_height(0.8).move_to(TD_rect.get_top() + 0.55*DOWN)
         TD_rect.set_z_index(3)
         TD_title.set_z_index(3)
@@ -269,7 +273,7 @@ class Flash(Slide):
             .shift(cptp_rect.width/8*RIGHT+linbladian_rect.width/4*RIGHT+1*DOWN)
         ITD_title = VGroup(
             Tex(r"Constant Gen.", color = green_color),
-            MathTex(r"e^{t\mathcal{L}}", color = green_color)
+            MathTex(r"\mathcal{E}=e^{t\mathcal{L}}", color = green_color)
         ).arrange(DOWN, buff = 0.2).scale_to_fit_height(0.8).move_to(ITD_rect.get_top() + 0.55*DOWN)
         ITD_rect.set_z_index(3)
         ITD_title.set_z_index(3)
@@ -303,54 +307,38 @@ class Flash(Slide):
         self.play(FadeIn(uni_set))
         self.wait(0.3)
 
-        self.next_slide(loop = True)
-
-        loop_set = VGroup(ITD_set, uni_set)
-        
-        self.play(loop_set.animate.scale(1.1), title_problem.animate.scale(1.1))
-        self.play(loop_set.animate.scale(1/1.1), title_problem.animate.scale(1/1.1))
-
         self.next_slide()
-        text1 = Tex(r"Necessary and sufficient conditions given by [1]")
-        text2 = Tex(r"Hard to use analytically", r" $\rightarrow$ ", r"Let's propose solvable models")
-        text2[0].set_color(red_color)
-        text2[2].set_color(green_color)
-        text3 = Tex(r"Inconclusive results numerically [2]", r" $\rightarrow$ ", r"Let's find better criteria")
-        text3[0].set_color(red_color)
-        text3[2].set_color(green_color)
-        text4 = Tex(r"Only valid for diagonalizable cases", r" $\rightarrow$ ", r"Let's generalize it. Symmetries")
-        text4[0].set_color(red_color)
-        text4[2].set_color(green_color)
 
-        wolf_data = VGroup(
-            text1.to_edge(LEFT, buff = 0.5),
-            text2.to_edge(LEFT, buff = 1),
-            text3.to_edge(LEFT, buff = 1),
-            text4.to_edge(LEFT, buff = 1)
-        ).arrange(DOWN, buff = 0.35, center=False).scale_to_fit_width(13).to_edge(LEFT, buff = 0.5).to_edge(DOWN, buff = 0.5)
+        self.play(FadeOut(sets))
 
-        text1.shift(0.25*UP)
-        under1 = Underline(text1).set_color(black_color)
+        lindbladian = MathTex(r"\mathcal{L}(t)[\rho]", 
+                              r"=", 
+                              r"-\frac{i}{\hbar}[H(t),\rho]", 
+                              r"+",
+                              r"\sum_{k=1}^{d^2-1}",r"K_{\alpha,\beta}(t)",
+                              r"\left(L_\alpha(t)\rho L_\beta(t)^\dagger - \frac{1}{2}\{L_\beta(t)^\dagger L_\alpha(t), \rho\} \right)", tex_template=texTemplate).scale(0.8)
+        lindbladian.next_to(title_problem, DOWN, buff = 0.5)
+
+        surrect1 = SurroundingRectangle(lindbladian[2], color = red_color, buff = 0.1)
+        surrect2 = SurroundingRectangle(lindbladian[4:], color = blue_color, buff = 0.1)
 
         refs = VGroup(
-                Tex(r"\textbf{[1]}").scale(0.8),
-                Tex(r"Wolf, M., Eisert, J., Cubitt, T., \& Cirac, J. (2008).\\ \textit{Assessing Non-Markovian Quantum Dynamics.}\\ Phys. Rev. Lett., 101, 150402.", tex_environment="flushleft").scale(0.8),
-                Tex(r"\textbf{[2]}").scale(0.8),
-                Tex(r"Schnell, A., Eckardt, A., \& Denisov, S. (2020).\\ \textit{Is there a Floquet Lindbladian?}\\ Phys. Rev. B, 101, 100301.", tex_environment="flushleft").scale(0.8),
-            ).arrange_in_grid(3, 2, buff = 0.5, cell_alignment=UP).scale_to_fit_height(0.4*sets.height)\
-            
-        sets_and_refs = VGroup(sets.copy().scale(0.5), refs).center().arrange(RIGHT, buff = 0.5).next_to(title_problem, DOWN, buff = 0.25)
+            Tex(r"\textbf{[Wolf08]}: M. M. Wolf et al., Phys. Rev. Lett. 101, 150402 (2008)"),
+            Tex(r"\textbf{[Rivas10]}: A. Rivas et al., Phys. Rev. Lett. 105, 050403 (2010)"),
+            Tex(r"\textbf{[Hall14]}: M. J. W. Hall et al., Phys. Rev. A 89, 042120 (2014)")
+        ).arrange(DOWN, buff = 0.25).scale_to_fit_height(1).to_edge(DOWN, buff = 0.1)
+
+        self.play(Write(lindbladian))
 
         self.next_slide()
-        self.play(
-            sets.animate.move_to(sets_and_refs[0]).scale(0.5),
-            Write(refs),
-            Write(wolf_data[0]), Create(under1)
-        )
+        self.play(Create(surrect1))
+        self.next_slide()
+        self.play(FadeOut(surrect1), Create(surrect2))
 
-        for obj in wolf_data[1:]:
-            self.next_slide()
-            self.play(Write(obj))
+        self.next_slide()
+        self.play(Write(refs))
+
+        self.next_slide()
         
         # -----------------------------------------------
         #                   Bye Bye
@@ -363,54 +351,3 @@ class Flash(Slide):
 
         self.play(Write(end_slide))
         self.wait(0.1)
-
-        # -----------------------------------------------
-        #                   EXTRAS
-        # -----------------------------------------------
-
-        self.next_slide()
-        self.remove_all()
-
-        title_floquet_ext = Title("Floquet Theorem")
-        title_floquet_ext.underline.color = black_color
-
-        text1 = Tex(r"Consider the system of linear diff. equations for $M(t)\in\mathcal{M}_n(\mathbb{C})$")
-        system = MathTex(r"\frac{d}{dt}M(t) = C(t)M(t);\quad M(0) = I_n;\qquad C(t)\in\mathcal{M}_n(\mathbb{C})")
-        text2 = Tex(r"If $M(t) = M(t+T)$ for some fixed $T\in\mathbb{R}$, then:")
-        floquet = MathTex(r"M(t) = P(t)e^{t G}\text{ with } P(t) = P(t+T)")
-
-        floquetslide = VGroup(text1, system, text2, floquet).arrange(DOWN, buff = 0.5)
-
-        self.add(
-            title_floquet_ext,
-            floquetslide
-        )
-
-        self.wait(1)
-
-        self.next_slide()
-        self.remove_all()
-
-        title_cp = Title("Completely Positive Maps")
-        title_cp.underline.color = black_color
-
-        big_sys = Ellipse(8, 4, color = red_color, fill_color = red_color, fill_opacity = 1)
-        im_sys = Ellipse(4, 3, color = blue_color, fill_color = blue_color, fill_opacity = 1).shift(1.5*RIGHT)
-
-        eq = MathTex(r"\mathcal{E}",r"\otimes", r"\mathcal{I}_\text{n}", r"\text{ must map density matrices to density matrices}").next_to(big_sys, DOWN, buff = 1)
-        eq[0].set_color(blue_color)
-        eq[2].set_color(red_color)
-
-        self.add(
-            title_cp,
-            big_sys, 
-            im_sys,
-            Text("System").scale(0.5).move_to(im_sys),
-            Text(r"Ancilla System").scale(0.5).move_to(big_sys).shift(2*LEFT),
-            eq
-        )
-
-        self.wait(1)
-
-        self.next_slide()
-        self.remove_all()
