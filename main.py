@@ -309,24 +309,34 @@ class Bienal(Slide):
 
         self.next_slide()
 
+        # -----------------------------------------------
+        #      Wolf, Rivas and Hall results
+        # -----------------------------------------------
+
         self.play(FadeOut(sets))
 
-        lindbladian = MathTex(r"\mathcal{L}(t)[\rho]", 
+        lindbladian = MathTex(r"\mathcal{L}[\rho]", 
                               r"=", 
-                              r"-\frac{i}{\hbar}[H(t),\rho]", 
+                              r"-\frac{i}{\hbar}[H,\rho]", 
                               r"+",
-                              r"\sum_{k=1}^{d^2-1}",r"K_{\alpha,\beta}(t)",
-                              r"\left(L_\alpha(t)\rho L_\beta(t)^\dagger - \frac{1}{2}\{L_\beta(t)^\dagger L_\alpha(t), \rho\} \right)", tex_template=texTemplate).scale(0.8)
+                              r"\sum_{k=1}^{d^2-1}",r"K_{\alpha,\beta}",
+                              r"\left(L_\alpha\rho L_\beta(t)^\dagger - \frac{1}{2}\{L_\beta^\dagger L_\alpha, \rho\} \right)", tex_template=texTemplate).scale(0.8)
         lindbladian.next_to(title_problem, DOWN, buff = 0.5)
 
         surrect1 = SurroundingRectangle(lindbladian[2], color = red_color, buff = 0.1)
         surrect2 = SurroundingRectangle(lindbladian[4:], color = blue_color, buff = 0.1)
 
-        refs = VGroup(
+        text1 = Tex(r"A linear map $\mathcal{G}: L(\mathcal{H}) \rightarrow L(\mathcal{H})$ is Lindbladian iff:").next_to(lindbladian, DOWN, buff = 0.5)
+        conditions = VGroup(
+            Tex(r"$\mathcal{G}$ is Hermiticity preserving"), MathTex(r"\Longleftrightarrow"), MathTex(r"\mathcal{G}[X^\dagger] = (\mathcal{G}[X])^\dagger"),
+            Tex(r"$\mathcal{G}$ generates trace preserving maps"), MathTex(r"\Longleftrightarrow"), MathTex(r"\mathcal{G}^*[I] = 0"),
+            Tex(r"$\mathcal{G}$ is Conditionally Completely Positive"), MathTex(r"\Longleftrightarrow"), MathTex(r"K \ge 0")
+        ).arrange_in_grid(3,3, buff = 0.35).next_to(text1, DOWN, buff = 0.5).scale(0.8)
+
+        refs1 = VGroup(
             Tex(r"\textbf{[Wolf08]}: M. M. Wolf et al., Phys. Rev. Lett. 101, 150402 (2008)"),
-            Tex(r"\textbf{[Rivas10]}: A. Rivas et al., Phys. Rev. Lett. 105, 050403 (2010)"),
             Tex(r"\textbf{[Hall14]}: M. J. W. Hall et al., Phys. Rev. A 89, 042120 (2014)")
-        ).arrange(DOWN, buff = 0.25).scale_to_fit_height(1).to_edge(DOWN, buff = 0.1)
+        ).arrange(DOWN, buff = 0.2).to_edge(DOWN, buff = 0.15).scale(0.4)
 
         self.play(Write(lindbladian))
 
@@ -336,9 +346,24 @@ class Bienal(Slide):
         self.play(FadeOut(surrect1), Create(surrect2))
 
         self.next_slide()
-        self.play(Write(refs))
+        self.play(FadeOut(surrect2), Write(text1), Write(refs1))
+        self.next_slide()
+        self.play(Write(conditions[0:3]))
+        self.next_slide()
+        self.play(Write(conditions[3:6]))
+        self.next_slide()
+        self.play(Write(conditions[6:]))
+        self.next_slide()
+        self.play(
+            lindbladian[5].animate.set_color(red_color),
+            conditions[-1][-1].animate.set_color(red_color)
+        )
+        Ko = lindbladian[5].copy()
+        self.play(Succession(Ko.animate.move_to(conditions[-1][-1]), FadeOut(Ko)))
 
         self.next_slide()
+
+        Tex(r"\textbf{[Hall14]}: M. J. W. Hall et al., Phys. Rev. A 89, 042120 (2014)")
         
         # -----------------------------------------------
         #                   Bye Bye
@@ -348,6 +373,8 @@ class Bienal(Slide):
         self.remove_all()
 
         end_slide = Tex(r"Thank you for your attention! \\ Any questions?").scale(1.25)
+        slides_at = Tex(r"Slides available at: ", r"asojo66.github.io/BienalSevilla2026/").to_edge(DOWN, buff = 0.25).scale(0.7)
+        slides_at[-1].set_color(blue_color)
 
-        self.play(Write(end_slide))
+        self.play(Write(end_slide), Write(slides_at))
         self.wait(0.1)
