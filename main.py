@@ -336,7 +336,7 @@ class Bienal(Slide):
         refs1 = VGroup(
             Tex(r"\textbf{[Wolf08]}: M. M. Wolf et al., Phys. Rev. Lett. 101, 150402 (2008)"),
             Tex(r"\textbf{[Hall14]}: M. J. W. Hall et al., Phys. Rev. A 89, 042120 (2014)")
-        ).arrange(DOWN, buff = 0.2).to_edge(DOWN, buff = 0.15).scale(0.4)
+        ).arrange(DOWN, aligned_edge = LEFT, buff = 0.2).to_edge(DOWN, buff = 0.15).scale(0.4)
 
         self.play(Write(lindbladian))
 
@@ -362,8 +362,46 @@ class Bienal(Slide):
         self.play(Succession(Ko.animate.move_to(conditions[-1][-1]), FadeOut(Ko)))
 
         self.next_slide()
+        self.fadeout_all()
+        # -----------------------------------------------
+        #              Measures of Markovianity
+        # -----------------------------------------------
 
-        Tex(r"\textbf{[Hall14]}: M. J. W. Hall et al., Phys. Rev. A 89, 042120 (2014)")
+        title_problem = Title(r'Measures of Lindbladianity?')
+        title_problem.underline.color = black_color
+
+        text1 = Tex(r"If $\mathcal{G}$ is HP and TP, we can define its Lindbladianity").next_to(title_problem, DOWN, buff = 0.25).scale(0.8)
+
+        mathtable = [
+            [MathTex(r"\mu_W = \text{min}\{\mu\,|\,\mu I+\Omega_{\perp} C_\mathcal{G} \Omega_{\perp} \ge_0\}"), MathTex(r"\mu_R = \lim_{\epsilon\rightarrow 0^+} \frac{||(1+\mathcal{G}\otimes I)[\Omega]||_1 - 1}{\epsilon}")],
+            [MathTex(r"\mu_W = |\text{max}\{0, -\lambda_1, \dots, -\lambda_{d^2}\}|"), MathTex(r"\mu_R = \frac{d}{2}\sum_{j = 1}^{d^2}(|\lambda_j|-\lambda_j)")],
+            [Tex(r"Adding isotropic noise"), Tex(r"Markovian divisility")]
+        ]
+        lindbladianity = MobjectTable(
+            mathtable,
+            col_labels=[Text("Wolf"), Text("Rivas")],
+            row_labels=[Text("Definition"), Text("Measure"), Text("Motivation")],
+            line_config={"color": black_color}
+        ).scale_to_fit_width(0.85*screen_width).next_to(text1, DOWN, buff = 0.5)
+
+        text2 = MathTex(r"\text{Eigenvalues }\rho(K) = \{\lambda_1, \dots, \lambda_{d^2}\}").scale(0.7).to_corner(DOWN+LEFT, buff = 0.5)
+
+        refs2 = VGroup(
+            Tex(r"\textbf{[Wolf08]}: M. M. Wolf et al., Phys. Rev. Lett. 101, 150402 (2008)"),
+            Tex(r"\textbf{[Rivas10]}: A. Rivas et al., Phys. Rev. Lett. 105, 050403 (2014)"),
+            Tex(r"\textbf{[Hall14]}: M. J. W. Hall et al., Phys. Rev. A 89, 042120 (2014)")
+        ).arrange(DOWN, aligned_edge = LEFT, buff = 0.2).scale(0.4).to_corner(DOWN+RIGHT, buff = 0.5)
+
+        self.play(Write(title_problem), Write(text1), Write(text2), Write(refs2))
+        self.next_slide()
+        self.play(
+            Write(lindbladianity.get_horizontal_lines()),
+            Write(lindbladianity.get_vertical_lines()),
+            Write(lindbladianity.get_col_labels()),
+            Write(lindbladianity.get_row_labels()),
+            Write(lindbladianity.get_entries_without_labels())
+        )
+        
         
         # -----------------------------------------------
         #                   Bye Bye
