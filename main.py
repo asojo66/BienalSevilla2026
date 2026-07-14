@@ -717,9 +717,9 @@ class Bienal(Slide):
         self.next_slide()
         self.remove_all()
 
-        end_slide = VGroup(
+        end_slide = Group(
             Tex(r"Thank you for your attention! \\ Any questions?").scale(1.25),
-            SVGMobject("./assets/qr.svg").scale_to_fit_height(2.5)
+            ImageMobject("./assets/qr.png").scale_to_fit_height(2.5)
         ).arrange(DOWN, buff = 0.5).center()
 
         self.play(Write(end_slide[0]), FadeIn(end_slide[1], shift = UP))
