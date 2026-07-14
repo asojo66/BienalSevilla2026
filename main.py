@@ -18,6 +18,126 @@ Tex.set_default(color = black_color)
 MathTex.set_default(color = black_color)
 Dot.set_default(color = black_color)
 
+def step_graph(x_size, y_size):
+    x_min, x_max = -0.2, 1.5
+    y_min, y_max = -0.2, 1.5
+    tau = 0.5
+    T = 1
+
+    axes = Axes(
+        x_range=[x_min, x_max, 0.5],
+        y_range=[y_min, y_max, 1],
+        x_length=x_size,
+        y_length=y_size,
+        axis_config={"color": black_color}
+    )
+
+    # Etiquetas de ejes
+    x_label = MathTex(r"t").next_to(axes.x_axis.get_right(), DOWN)
+    y_label = MathTex(r"f(t)").next_to(axes.y_axis.get_top(), LEFT)
+
+    # Construir la función escalón con segmentos para evitar muestreo borroso
+    left_segment = Line(
+        axes.coords_to_point(0, 0),
+        axes.coords_to_point(tau, 0),
+        color=blue_color,
+        stroke_width=4
+    )
+    right_segment = Line(
+        axes.coords_to_point(tau, 1),
+        axes.coords_to_point(T, 1),
+        color=blue_color,
+        stroke_width=4
+    )
+    # Salto en tau (línea corta para indicar discontinuidad)
+    jump = DashedLine(
+        axes.coords_to_point(tau, 0),
+        axes.coords_to_point(tau, y_max),
+        color=black_color,
+        dash_length=0.08
+    )
+
+    # Línea vertical en tiempo T (destacada)
+    vline = DashedLine(
+        axes.coords_to_point(T, 0),
+        axes.coords_to_point(T, y_max),
+        color=red_color,
+        dash_length=0.08,
+        stroke_width=3.5
+    )
+
+    # Ticks y etiquetas abstractas para tau y T
+    
+    tau_label = MathTex(r"\tau").next_to(axes.coords_to_point(tau, 0), DOWN * 0.7)
+    T_label = MathTex(r"T").next_to(axes.coords_to_point(T, 0), DOWN * 0.6)
+
+    # Etiqueta de los niveles 0 y 1
+    zero_label = MathTex(r"0").next_to(axes.coords_to_point(x_min, 0), LEFT * 0.25)
+    one_label = MathTex(r"1").next_to(axes.coords_to_point(x_min, 1), LEFT * 0.25)
+
+    group = VGroup(
+        axes, x_label, y_label,
+        left_segment, right_segment, jump,
+        vline, tau_label, T_label,
+        zero_label, one_label
+    ).scale(0.9)
+
+    return group
+
+def delta_graph(x_size, y_size):
+
+    x_min, x_max = -0.2, 1.5
+    y_min, y_max = -0.2, 1.5
+    tau = 0.5
+    T = 1
+
+    axes = Axes(
+        x_range=[x_min, x_max, 0.5],
+        y_range=[y_min, y_max, 1],
+        x_length=x_size,
+        y_length=y_size,
+        axis_config={"color": black_color}
+    )
+
+    # Etiquetas de ejes
+    x_label = MathTex(r"t").next_to(axes.x_axis.get_right(), DOWN)
+    y_label = MathTex(r"f(t)").next_to(axes.y_axis.get_top(), LEFT)
+
+    # Salto en tau (línea corta para indicar discontinuidad)
+    jump = Arrow(
+        axes.coords_to_point(tau, 0),
+        axes.coords_to_point(tau, y_max),
+        color=red_color,
+        buff = 0.0
+    )
+
+    # Línea vertical en tiempo T (destacada)
+    vline = DashedLine(
+        axes.coords_to_point(T, 0),
+        axes.coords_to_point(T, y_max),
+        color=black_color,
+        dash_length=0.08,
+        stroke_width=3.5
+    )
+
+    # Ticks y etiquetas abstractas para tau y T
+    
+    tau_label = MathTex(r"\tau").next_to(axes.coords_to_point(tau, 0), DOWN * 0.7)
+    T_label = MathTex(r"T").next_to(axes.coords_to_point(T, 0), DOWN * 0.6)
+
+    # Etiqueta de los niveles 0 y 1
+    zero_label = MathTex(r"0").next_to(axes.coords_to_point(x_min, 0), LEFT * 0.25)
+    one_label = MathTex(r"1").next_to(axes.coords_to_point(x_min, 1), LEFT * 0.25)
+
+    group = VGroup(
+        axes, x_label, y_label, jump,
+        vline, tau_label, T_label,
+        zero_label, one_label
+    ).scale(0.9)
+
+    return group
+        
+
 class Bienal(Slide):
 
     def fadeout_all(self, **kwargs):
@@ -373,8 +493,8 @@ class Bienal(Slide):
         text1 = Tex(r"If $\mathcal{G}$ is HP and TP, we can define its Lindbladianity").next_to(title_problem, DOWN, buff = 0.25).scale(0.8)
 
         mathtable = [
-            [MathTex(r"\mu_W = \text{min}\{\mu\,|\,\mu I+\Omega_{\perp} C_\mathcal{G} \Omega_{\perp} \ge_0\}"), MathTex(r"\mu_R = \lim_{\epsilon\rightarrow 0^+} \frac{||(1+\mathcal{G}\otimes I)[\Omega]||_1 - 1}{\epsilon}")],
-            [MathTex(r"\mu_W = |\text{max}\{0, -\lambda_1, \dots, -\lambda_{d^2}\}|"), MathTex(r"\mu_R = \frac{d}{2}\sum_{j = 1}^{d^2}(|\lambda_j|-\lambda_j)")],
+            [MathTex(r"\mu_W = \text{min}\{\mu\,|\,\mu I+\Omega_{\perp} C_\mathcal{G} \Omega_{\perp} \ge_0\}"), MathTex(r"\mu_R = \lim_{\epsilon\rightarrow 0^+} \frac{||(1+\epsilon \mathcal{G}\otimes I)[\Omega]||_1 - 1}{\epsilon}")],
+            [MathTex(r"\mu_W = \frac{1}{d}|\text{max}\{0, -\gamma_1, \dots, -\gamma_{d^2}\}|"), MathTex(r"\mu_R = \frac{1}{d}\sum_{j = 1}^{d^2}(|\gamma_j|-\gamma_j)")],
             [Tex(r"Adding isotropic noise"), Tex(r"Markovian divisility")]
         ]
         lindbladianity = MobjectTable(
@@ -384,7 +504,7 @@ class Bienal(Slide):
             line_config={"color": black_color}
         ).scale_to_fit_width(0.85*screen_width).next_to(text1, DOWN, buff = 0.5)
 
-        text2 = MathTex(r"\text{Eigenvalues }\rho(K) = \{\lambda_1, \dots, \lambda_{d^2}\}").scale(0.7).to_corner(DOWN+LEFT, buff = 0.5)
+        text2 = MathTex(r"\text{Eigenvalues }\rho(K) = \{\gamma_1, \dots, \gamma_{d^2}\}").scale(0.7).to_corner(DOWN+LEFT, buff = 0.5)
 
         refs2 = VGroup(
             Tex(r"\textbf{[Wolf08]}: M. M. Wolf et al., Phys. Rev. Lett. 101, 150402 (2008)"),
@@ -401,7 +521,134 @@ class Bienal(Slide):
             Write(lindbladianity.get_row_labels()),
             Write(lindbladianity.get_entries_without_labels())
         )
+
+        # -----------------------------------------------
+        #                   Schnell
+        # -----------------------------------------------
+
+        self.next_slide()
+        self.fadeout_all()
+
+        title_problem = Title(r'Current published studies')
+        title_problem.underline.color = black_color
+
+        text1 = VGroup(
+            Tex(r"Numerical study of a driven two-level system with dissipation").scale(0.8),
+            Tex(r"Always HP and TP, but not always CCP").scale(0.8),
+        ).arrange(DOWN, buff = 0.2).next_to(title_problem, DOWN, buff = 0.5)
+        schnell_fig = ImageMobject("./assets/schnell.png").scale_to_fit_height(3.5)
+        h_S = MathTex(r"H(t) =\frac{\Delta}{2}\sigma_z+E \cos{(\omega t - \phi)}\sigma_x").scale(0.8)
+        l_S = MathTex(r"L = \sqrt{\gamma}\sigma_-").scale(0.8)
+
+        schnell_group = Group(
+            schnell_fig,
+            VGroup(
+                h_S,
+                l_S
+            ).arrange(DOWN, buff = 0.5)
+        ).arrange(RIGHT, buff = 1).next_to(text1, DOWN, buff = 0.5)
+
+
+        refs3 = VGroup(
+            Tex(r"\textbf{[Schnell20]}: A. Schnell et al., Phys. Rev. B 101, 100301(R) (2020)")
+        ).arrange(DOWN, aligned_edge = LEFT, buff = 0.2).scale(0.4).to_corner(DOWN+RIGHT, buff = 0.5)
+
+        self.play(Write(title_problem), Write(text1), Write(refs3))
+        self.next_slide()
+        self.play(FadeIn(schnell_fig, shift = DOWN), Write(schnell_group[1]))
+
+        # -----------------------------------------------
+        #                   BIT FLIP
+        # -----------------------------------------------
+
+        self.next_slide()
+        self.remove_all()
+
+        title_problem = Title(r'Our approach: Analytical study of simple systems')
+        title_problem.underline.color = black_color
+
+        text1 = MathTex(r"H(t) = f(t)E\sigma_z\qquad L = \sqrt{\gamma}\sigma_x").scale(0.8).next_to(title_problem, DOWN, buff = 0.5)
+
+        stepg = step_graph(4, 3)
+        axes, x_label, y_label, \
+        left_segment, right_segment, jump, \
+        vline, tau_label, T_label, \
+        zero_label, one_label = stepg
+
+        regions1img = ImageMobject("./assets/fig1.png").scale_to_fit_height(4)
+        regions1 = Group(
+                regions1img,
+                MathTex(r"\gamma = 1, \tau = T/2").scale(0.6)
+        ).arrange(DOWN, buff = 0.1).center()
+
+        figs1 = Group(
+            stepg,
+            regions1
+        ).arrange(RIGHT, buff = 1).next_to(text1, DOWN, buff = 0.35)
+
+        figs1[0].shift(0.5*(RIGHT+UP))
+        figs1[1][1].shift(0.7*LEFT)
+
+        text2 = Tex(r"Spin with an external field and random bit-flip errors").scale(0.8).next_to(figs1, DOWN, buff = 0.5)
+        text3 = Tex(r"Always TP, but not HP nor CPP").scale(0.8).next_to(figs1, DOWN, buff = 0.5)
         
+        self.play(Write(title_problem))
+
+        self.play(Write(text1))
+        self.next_slide()
+        self.play(Create(axes), Write(x_label), Write(y_label), time = 0.2)
+        self.play(Create(left_segment), Create(right_segment), time = 0.2)
+        self.play(Create(jump), Create(vline), time = 0.2)
+        self.play(Write(tau_label), Write(T_label), Write(zero_label), Write(one_label), time = 0.2)
+        self.play(FadeIn(regions1, shift = UP))
+        self.play(Write(text2))
+
+        self.next_slide()
+        self.play(ReplacementTransform(text2, text3))
+
+        
+        # -----------------------------------------------
+        #                 DELTA LIMIT
+        # -----------------------------------------------
+
+        self.next_slide()
+        self.play(FadeOut(figs1), FadeOut(text3), FadeOut(text1))
+
+        title_problem = Title(r'Our approach: Analytical study of simple systems')
+        title_problem.underline.color = black_color
+
+        text11 = MathTex(r"\Delta t H(t) = f(t)\alpha \sigma_z\qquad L = \sqrt{\gamma}\sigma_x").scale(0.8).next_to(title_problem, DOWN, buff = 0.5)
+
+        stepg = delta_graph(4, 3)
+        axes, x_label, y_label, jump, \
+        vline, tau_label, T_label, \
+        zero_label, one_label = stepg
+
+        regions1img = ImageMobject("./assets/fig1Delta.png").scale_to_fit_height(4)
+        regions1 = Group(
+                regions1img,
+                MathTex(r"\gamma = 1, \tau = T/2").scale(0.6)
+        ).arrange(DOWN, buff = 0.1).center()
+
+        figs1 = Group(
+            stepg,
+            regions1
+        ).arrange(RIGHT, buff = 1).next_to(text1, DOWN, buff = 0.35)
+
+        figs1[0].shift(0.5*(RIGHT+UP))
+        figs1[1][1].shift(0.7*LEFT)
+
+        text2 = Tex(r"Spin with random bit-flip errors that is `kicked'").scale(0.8).next_to(figs1, DOWN, buff = 0.5)
+
+        self.play(ReplacementTransform(text1, text11))
+        self.next_slide()
+        self.play(Create(axes), Write(x_label), Write(y_label), time = 0.2)
+        self.play(Create(jump), Create(vline), time = 0.2)
+        self.play(Write(tau_label), Write(T_label), Write(zero_label), Write(one_label), time = 0.2)
+        self.play(FadeIn(regions1, shift = UP))
+        self.play(Write(text2))
+
+        self.wait(0.3)
         
         # -----------------------------------------------
         #                   Bye Bye
@@ -410,9 +657,10 @@ class Bienal(Slide):
         self.next_slide()
         self.remove_all()
 
-        end_slide = Tex(r"Thank you for your attention! \\ Any questions?").scale(1.25)
-        slides_at = Tex(r"Slides available at: ", r"asojo66.github.io/BienalSevilla2026/").to_edge(DOWN, buff = 0.25).scale(0.7)
-        slides_at[-1].set_color(blue_color)
+        end_slide = VGroup(
+            Tex(r"Thank you for your attention! \\ Any questions?").scale(1.25),
+            SVGMobject("./assets/qr.svg").scale_to_fit_height(2.5)
+        ).arrange(DOWN, buff = 0.5).center()
 
-        self.play(Write(end_slide), Write(slides_at))
+        self.play(Write(end_slide[0]), FadeIn(end_slide[1], shift = UP))
         self.wait(0.1)
