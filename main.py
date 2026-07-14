@@ -612,7 +612,7 @@ class Bienal(Slide):
         # -----------------------------------------------
 
         self.next_slide()
-        self.play(FadeOut(figs1), FadeOut(text3), FadeOut(text1))
+        self.play(FadeOut(figs1), FadeOut(text3))
 
         title_problem = Title(r'Our approach: Analytical study of simple systems')
         title_problem.underline.color = black_color
@@ -627,7 +627,7 @@ class Bienal(Slide):
         regions1img = ImageMobject("./assets/fig1Delta.png").scale_to_fit_height(4)
         regions1 = Group(
                 regions1img,
-                MathTex(r"\gamma = 1, \tau = T/2").scale(0.6)
+                MathTex(r"\gamma = 1, \tau = T").scale(0.6)
         ).arrange(DOWN, buff = 0.1).center()
 
         figs1 = Group(
@@ -639,6 +639,7 @@ class Bienal(Slide):
         figs1[1][1].shift(0.7*LEFT)
 
         text2 = Tex(r"Spin with random bit-flip errors that is `kicked'").scale(0.8).next_to(figs1, DOWN, buff = 0.5)
+        text3 = Tex(r"Only Lindbladian in zero measure curves").scale(0.8).next_to(figs1, DOWN, buff = 0.5)
 
         self.play(ReplacementTransform(text1, text11))
         self.next_slide()
@@ -647,9 +648,68 @@ class Bienal(Slide):
         self.play(Write(tau_label), Write(T_label), Write(zero_label), Write(one_label), time = 0.2)
         self.play(FadeIn(regions1, shift = UP))
         self.play(Write(text2))
+        self.next_slide()
+        self.play(ReplacementTransform(text2, text3))
 
         self.wait(0.3)
+
+        # -----------------------------------------------
+        #                 DELTA LIMIT 2
+        # -----------------------------------------------
+
+        self.next_slide()
+        self.play(FadeOut(figs1), FadeOut(text3))
+
+        figs = Group(
+            Group(
+                ImageMobject("./assets/fig1Delta2.png").scale_to_fit_height(4),
+                MathTex(r"\gamma = 1, \tau = T").scale(0.6)
+            ).arrange(DOWN, buff = 0.1),
+            Group(
+                ImageMobject("./assets/fig3Delta.png").scale_to_fit_height(4),
+                MathTex(r"\gamma = 1, \tau = 0.92T").scale(0.6)
+            ).arrange(DOWN, buff = 0.1),
+            Group(
+                ImageMobject("./assets/fig2Delta.png").scale_to_fit_height(4),
+                MathTex(r"\gamma = 1, \tau = 0.5T").scale(0.6)
+            ).arrange(DOWN, buff = 0.1)
+        ).arrange(RIGHT, buff = 0.15).shift(DOWN)
         
+        figs[0][1].shift(0.3*RIGHT)
+        figs[1][1].shift(0.3*RIGHT)
+        figs[2][1].shift(0.7*LEFT)
+
+        self.play(FadeIn(figs, shift = UP))
+
+        # -----------------------------------------------
+        #                Conclusions
+        # -----------------------------------------------
+
+        self.next_slide()
+        self.remove_all()
+
+        title_problem = Title(r'Conclusions')
+        title_problem.underline.color = black_color
+
+        conclusions = VGroup(
+            Tex(r"1. Analytical study of simple systems is possible"),
+            Tex(r"2. The Hermiticity preserving property is not alwayws garanteed"),
+            Tex(r"3. Zero measure curves of Lindbladianity. Can't be found numerically"),
+            Tex(r"4. Defined Lindbladianity measures are only useful for HP and TP cases")
+        ).scale_to_fit_width(0.85*screen_width).arrange(DOWN, aligned_edge = LEFT, buff = 0.5)
+
+        self.play(Write(title_problem))
+
+        self.next_slide()
+        self.play(Write(conclusions[0]))
+        self.next_slide()
+        self.play(Write(conclusions[1]))
+        self.next_slide()
+        self.play(Write(conclusions[2]))
+        self.next_slide()
+        self.play(Write(conclusions[3]))
+
+
         # -----------------------------------------------
         #                   Bye Bye
         # -----------------------------------------------
