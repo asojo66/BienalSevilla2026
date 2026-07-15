@@ -379,7 +379,7 @@ class Bienal(Slide):
         TD_rect = Rectangle(height = 3, width = 0.25*11, color = green_color, fill_color = green_color, fill_opacity=0.1)\
             .shift(cptp_rect.width/8*RIGHT-linbladian_rect.width/4*RIGHT+1*DOWN)
         TD_title = VGroup(
-            Tex(r"Non-Constant Gen.", color = green_color).scale(0.8),
+            Tex(r"Non-Constant Gen.", color = green_color).scale(0.7),
             MathTex(r"\mathcal{E}=\mathcal{T}e^{\int d\tau\mathcal{G}(\tau)}", color = green_color).scale(0.9)
         ).arrange(DOWN, buff = 0.2).scale_to_fit_height(0.8).scale_to_fit_height(0.8).move_to(TD_rect.get_top() + 0.55*DOWN)
         TD_rect.set_z_index(3)
@@ -392,7 +392,7 @@ class Bienal(Slide):
         ITD_rect = Rectangle(height = 3, width = 0.25*11, color = green_color, fill_color = green_color, fill_opacity=0.1)\
             .shift(cptp_rect.width/8*RIGHT+linbladian_rect.width/4*RIGHT+1*DOWN)
         ITD_title = VGroup(
-            Tex(r"Constant Gen.", color = green_color),
+            Tex(r"Constant Gen.", color = green_color).scale(0.7),
             MathTex(r"\mathcal{E}=e^{t\mathcal{L}}", color = green_color)
         ).arrange(DOWN, buff = 0.2).scale_to_fit_height(0.8).move_to(ITD_rect.get_top() + 0.55*DOWN)
         ITD_rect.set_z_index(3)
@@ -440,7 +440,7 @@ class Bienal(Slide):
                               r"-\frac{i}{\hbar}[H,\rho]", 
                               r"+",
                               r"\sum_{k=1}^{d^2-1}",r"K_{\alpha,\beta}",
-                              r"\left(L_\alpha\rho L_\beta(t)^\dagger - \frac{1}{2}\{L_\beta^\dagger L_\alpha, \rho\} \right)", tex_template=texTemplate).scale(0.8)
+                              r"\left(L_\alpha\rho L_\beta^\dagger - \frac{1}{2}\{L_\beta^\dagger L_\alpha, \rho\} \right)", tex_template=texTemplate).scale(0.8)
         lindbladian.next_to(title_problem, DOWN, buff = 0.5)
 
         surrect1 = SurroundingRectangle(lindbladian[2], color = red_color, buff = 0.1)
@@ -448,9 +448,9 @@ class Bienal(Slide):
 
         text1 = Tex(r"A linear map $\mathcal{G}: L(\mathcal{H}) \rightarrow L(\mathcal{H})$ is Lindbladian iff:").next_to(lindbladian, DOWN, buff = 0.5)
         conditions = VGroup(
-            Tex(r"$\mathcal{G}$ is Hermiticity preserving"), MathTex(r"\Longleftrightarrow"), MathTex(r"\mathcal{G}[X^\dagger] = (\mathcal{G}[X])^\dagger"),
-            Tex(r"$\mathcal{G}$ generates trace preserving maps"), MathTex(r"\Longleftrightarrow"), MathTex(r"\mathcal{G}^*[I] = 0"),
-            Tex(r"$\mathcal{G}$ is Conditionally Completely Positive"), MathTex(r"\Longleftrightarrow"), MathTex(r"K \ge 0")
+            Tex(r"$\mathcal{G}$ is Hermiticity preserving (HP)"), MathTex(r"\Longleftrightarrow"), MathTex(r"\mathcal{G}[X^\dagger] = (\mathcal{G}[X])^\dagger"),
+            Tex(r"$\mathcal{G}$ generates trace preserving (TP) maps"), MathTex(r"\Longleftrightarrow"), MathTex(r"\mathcal{G}^*[I] = 0"),
+            Tex(r"$\mathcal{G}$ is Conditionally Completely Positive (CCP)"), MathTex(r"\Longleftrightarrow"), MathTex(r"K \ge 0")
         ).arrange_in_grid(3,3, buff = 0.35).next_to(text1, DOWN, buff = 0.5).scale(0.8)
 
         refs1 = VGroup(
@@ -564,7 +564,7 @@ class Bienal(Slide):
         self.next_slide()
         self.remove_all()
 
-        title_problem = Title(r'Our approach: Analytical study of simple systems')
+        title_problem = Title(r'Our approach: Analytical study on simple systems')
         title_problem.underline.color = black_color
 
         text1 = MathTex(r"H(t) = f(t)E\sigma_z\qquad L = \sqrt{\gamma}\sigma_x").scale(0.8).next_to(title_problem, DOWN, buff = 0.5)
@@ -617,7 +617,7 @@ class Bienal(Slide):
         title_problem = Title(r'Our approach: Analytical study of simple systems')
         title_problem.underline.color = black_color
 
-        text11 = MathTex(r"\Delta t H(t) = f(t)\alpha \sigma_z\qquad L = \sqrt{\gamma}\sigma_x").scale(0.8).next_to(title_problem, DOWN, buff = 0.5)
+        text11 = MathTex(r"H(t) = f(t)\alpha \sigma_z\qquad L = \sqrt{\gamma}\sigma_x").scale(0.8).next_to(title_problem, DOWN, buff = 0.5)
 
         stepg = delta_graph(4, 3)
         axes, x_label, y_label, jump, \
@@ -673,7 +673,7 @@ class Bienal(Slide):
                 ImageMobject("./assets/fig2Delta.png").scale_to_fit_height(4),
                 MathTex(r"\gamma = 1, \tau = 0.5T").scale(0.6)
             ).arrange(DOWN, buff = 0.1)
-        ).arrange(RIGHT, buff = 0.15).shift(DOWN)
+        ).arrange(RIGHT, buff = 0.15).shift(DOWN).scale(0.9)
         
         figs[0][1].shift(0.3*RIGHT)
         figs[1][1].shift(0.3*RIGHT)
