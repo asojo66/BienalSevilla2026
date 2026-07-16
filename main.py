@@ -223,7 +223,7 @@ class Bienal(Slide):
         ev_eq_u = MathTex(r"\dv{}{t}\ket{\Psi(t)} = -\frac{i}{\hbar}H(t)\ket{\Psi(t)}", tex_template=texTemplate)
         ev_eq_L = MathTex(r"\dv{}{t}\rho(t) = \mathcal{L}(t)\rho(t)", tex_template=texTemplate)
         prop_U = MathTex(r"\ket{\Psi(t)} = U(t,t_0)\ket{\Psi(t_0)} \text{ (Unitary)}", tex_template=texTemplate)
-        prop_L = MathTex(r"\rho(t_0)=\mathcal{E}(t,t_0)\rho(t_0) \text{ (CPTP Map)}", tex_template=texTemplate)
+        prop_L = MathTex(r"\rho(t)=\mathcal{E}(t,t_0)\rho(t_0) \text{ (CPTP Map)}", tex_template=texTemplate)
         periodic_row = [Tex(r"If $H(t+T) = H(t)$"), Tex(r"If $\mathcal{L}(t+T) = \mathcal{L}(t)$")]
         stroboscopic = [
                     MathTex(r"U(nT, 0) = ", r"e^{-\frac{i}{\hbar}nT H_\text{eff}}"),
@@ -493,7 +493,7 @@ class Bienal(Slide):
         text1 = Tex(r"If $\mathcal{G}$ is HP and TP, we can define its Lindbladianity").next_to(title_problem, DOWN, buff = 0.25).scale(0.8)
 
         mathtable = [
-            [MathTex(r"\mu_W = \text{min}\{\mu\,|\,\mu I+\Omega_{\perp} C_\mathcal{G} \Omega_{\perp} \ge_0\}"), MathTex(r"\mu_R = \lim_{\epsilon\rightarrow 0^+} \frac{||(1+\epsilon \mathcal{G}\otimes I)[\Omega]||_1 - 1}{\epsilon}")],
+            [MathTex(r"\mu_W = \text{min}\{\mu\,|\,\mu I+\Omega_{\perp} C_\mathcal{G} \Omega_{\perp} \ge 0\}"), MathTex(r"\mu_R = \lim_{\epsilon\rightarrow 0^+} \frac{||(1+\epsilon \mathcal{G}\otimes I)[\Omega]||_1 - 1}{\epsilon}")],
             [MathTex(r"\mu_W = \frac{1}{d}|\text{max}\{0, -\gamma_1, \dots, -\gamma_{d^2}\}|"), MathTex(r"\mu_R = \frac{1}{d}\sum_{j = 1}^{d^2}(|\gamma_j|-\gamma_j)")],
             [Tex(r"Adding isotropic noise"), Tex(r"Markovian divisility")]
         ]
@@ -693,7 +693,7 @@ class Bienal(Slide):
 
         conclusions = VGroup(
             Tex(r"1. Analytical study of simple systems is possible"),
-            Tex(r"2. The Hermiticity preserving property is not alwayws garanteed"),
+            Tex(r"2. The Hermiticity preserving property is not always guaranteed"),
             Tex(r"3. Zero measure curves of Lindbladianity. Can't be found numerically"),
             Tex(r"4. Defined Lindbladianity measures are only useful for HP and TP cases")
         ).scale_to_fit_width(0.85*screen_width).arrange(DOWN, aligned_edge = LEFT, buff = 0.5)
