@@ -7,6 +7,7 @@ screen_width = 16/9 * 8
 config.background_color = "#fcfbf1"
 black_color = "#323030"
 blue_color = "#6883FB"
+light_blue_color = "#A8B8FF"
 red_color = "#F1534D"
 green_color = "#5CB85C"
 yellow_color = "#ff6f1b"
@@ -251,16 +252,25 @@ class Bienal(Slide):
             col_labels=[Text("Closed"), Text("Open Lindbladian")],
             row_labels=[Text("State"), Text("Evolution"), Text("HOLA").set_opacity(0.0), Text("Floquet")],
             line_config = {"color": black_color}
-        ).scale_to_fit_width(screen_width).shift(0.5*DOWN)
+        ).scale_to_fit_width(screen_width)
         #floquet_table.remove(*floquet_table.get_horizontal_lines())
 
         footnotes = Tex(r"CPTP $\equiv$ Completely Positive Trace Preserving Map")\
-        .scale(0.7).next_to(floquet_table, DOWN, buff = 0.35)
+        .scale(0.45).to_corner(LEFT+DOWN, buff = 0.35)
+        lindbladian_t = MathTex(r"\mathcal{L}(t)[\rho]", 
+                              r"=", 
+                              r"-\frac{i}{\hbar}[H(t),\rho]", 
+                              r"+",
+                              r"\sum_{k=1}^{d^2-1}",r"K_{\alpha,\beta}(t)",
+                              r"\left(L_\alpha(t)\rho L_\beta^\dagger(t) - \frac{1}{2}\{L_\beta^\dagger(t) L_\alpha(t), \rho\} \right)",
+                              tex_template=texTemplate
+                        ).scale(0.45).to_corner(RIGHT+DOWN, buff = 0.35)
 
         slide = VGroup(
             title_floquet,
             floquet_table,
-            footnotes
+            footnotes,
+            lindbladian_t
         ).scale_to_fit_height(7.5).center()
         
         self.play(
@@ -269,7 +279,6 @@ class Bienal(Slide):
             Write(floquet_table.get_row_labels()),
             Create(floquet_table.get_vertical_lines()),
             Create(floquet_table.get_horizontal_lines()),
-            Write(footnotes)
         )
         
         for obj in floquet_table.get_columns()[1][1:]:
@@ -299,6 +308,8 @@ class Bienal(Slide):
         self.add(periodic_row[0])
         self.remove(connection_U)
         self.play(Write(floquet_table.get_columns()[2][1]))
+
+        self.play(Write(footnotes), Write(lindbladian_t))
 
         for obj in floquet_table.get_columns()[2][2:-1]:
             self.next_slide()
@@ -343,99 +354,180 @@ class Bienal(Slide):
         self.play(
             Transform(
                 floquet_table.get_rows()[-1][2],
-                Tex(r"$\mathcal{G}_\text{eff}$ is ???").scale(1.5).set_color(red_color).move_to(floquet_table.get_rows()[-1][2])
+                Tex(r"$\mathcal{G}_\text{eff} \overset{?}{=} \mathcal{L}_\text{eff}$?").scale(1.3).set_color(red_color).move_to(floquet_table.get_rows()[-1][2])
             )
         )
 
+        # # -----------------------------------------------
+        # #        Problem Statement and current solution
+        # # -----------------------------------------------
+
+        # self.next_slide()
+        # self.remove_all()
+
+        # title_problem = Title(r'Is the Floquet Generator $\mathcal{G}$ a Lindbladian?')
+        # title_problem.underline.color = black_color
+
+        # cptp_rect = Rectangle(height = 5.5, width = 9, color = blue_color, fill_color = blue_color, fill_opacity=0.1)
+        # cptp_title = Tex(r"$\mathcal{E}$ is CPTP", color = blue_color).scale_to_fit_height(0.35).move_to(cptp_rect.get_top() + 0.35*DOWN)
+        # cptp_rect.set_z_index(1)
+        # cptp_title.set_z_index(1)
+        # cptp_set = VGroup(
+        #     cptp_title,
+        #     cptp_rect
+        # )
+
+        # linbladian_rect = Rectangle(height = 4.25, width = 0.6*11, color = yellow_color, fill_color = yellow_color, fill_opacity=0.1)\
+        #     .shift(cptp_rect.width/8*RIGHT+0.5*DOWN)
+        # linbladian_title = Tex(r"$\mathcal{G}$ is Lindbladian", color = yellow_color).scale_to_fit_height(0.35).move_to(linbladian_rect.get_top() + 0.35*DOWN)
+        # linbladian_rect.set_z_index(2)
+        # linbladian_title.set_z_index(2)
+        # linbladian_set = VGroup(
+        #     linbladian_title,
+        #     linbladian_rect
+        # )
+
+        # TD_rect = Rectangle(height = 3, width = 0.25*11, color = green_color, fill_color = green_color, fill_opacity=0.1)\
+        #     .shift(cptp_rect.width/8*RIGHT-linbladian_rect.width/4*RIGHT+1*DOWN)
+        # TD_title = VGroup(
+        #     Tex(r"Non-Constant Gen.", color = green_color).scale(0.7),
+        #     MathTex(r"\mathcal{E}=\mathcal{T}e^{\int d\tau\mathcal{G}(\tau)}", color = green_color).scale(0.9)
+        # ).arrange(DOWN, buff = 0.2).scale_to_fit_height(0.8).scale_to_fit_height(0.8).move_to(TD_rect.get_top() + 0.55*DOWN)
+        # TD_rect.set_z_index(3)
+        # TD_title.set_z_index(3)
+        # TD_set = VGroup(
+        #     TD_title,
+        #     TD_rect
+        # )
+
+        # ITD_rect = Rectangle(height = 3, width = 0.25*11, color = green_color, fill_color = green_color, fill_opacity=0.1)\
+        #     .shift(cptp_rect.width/8*RIGHT+linbladian_rect.width/4*RIGHT+1*DOWN)
+        # ITD_title = VGroup(
+        #     Tex(r"Constant Gen.", color = green_color).scale(0.7),
+        #     MathTex(r"\mathcal{E}=e^{t\mathcal{L}}", color = green_color)
+        # ).arrange(DOWN, buff = 0.2).scale_to_fit_height(0.8).move_to(ITD_rect.get_top() + 0.55*DOWN)
+        # ITD_rect.set_z_index(3)
+        # ITD_title.set_z_index(3)
+        # ITD_set = VGroup(
+        #     ITD_title,
+        #     ITD_rect
+        # )
+
+        # uni_rect = Rectangle(height = 1.5, width = 2, color = red_color, fill_color = red_color, fill_opacity=0.1)\
+        #     .move_to(ITD_rect).shift(0.5*DOWN)
+        # uni_title = Tex(r"Unitary", color = red_color).scale_to_fit_height(0.35).move_to(uni_rect)
+        # uni_rect.set_z_index(4)
+        # uni_title.set_z_index(4)
+        # uni_set = VGroup(
+        #     uni_title,
+        #     uni_rect
+        # )
+
+        # sets = VGroup(cptp_set, linbladian_set, TD_set, ITD_set, uni_set).shift(0.5*DOWN)
+        
+        # self.play(Write(title_problem), FadeIn(cptp_set))
+        # self.wait(0.3)
+        # self.next_slide()
+        # self.play(FadeIn(linbladian_set))
+        # self.wait(0.3)
+        # self.next_slide()
+        # self.play(FadeIn(TD_set),FadeIn(ITD_set)) 
+        # #self.play(FadeIn(ITD_set))
+        # self.wait(0.3)
+        # self.next_slide()
+        # self.play(FadeIn(uni_set))
+        # self.wait(0.3)
+
+        # self.next_slide()
+
+        # # -----------------------------------------------
+        # #      Wolf, Rivas and Hall results
+        # # -----------------------------------------------
+
+        # self.play(FadeOut(sets))
+
         # -----------------------------------------------
-        #        Problem Statement and current solution
+        #        Integration and generator compute
         # -----------------------------------------------
 
         self.next_slide()
-        self.remove_all()
+        self.fadeout_all()
 
-        title_problem = Title(r'Is the Floquet Generator $\mathcal{G}$ a Lindbladian?')
+        int_label = MathTex(r"\partial_t\rho(t) = \mathcal{L}(t)\rho(t)")
+        int_box = RoundedRectangle(
+            width=0.3+int_label.width,
+            height=0.3+int_label.height,
+            corner_radius=0.15,
+            color = blue_color,
+            fill_color = light_blue_color,
+            fill_opacity = 0.7,
+        )
+        int_pro = VGroup(int_box, int_label).to_edge(LEFT, buff = 1.5)
+
+        e_label = MathTex(r"\mathcal{E}(t,t_0)")
+        e_box = RoundedRectangle(
+            width=0.3+e_label.width,
+            height=0.3+e_label.height,
+            corner_radius=0.15,
+            color = blue_color,
+            fill_color = light_blue_color,
+            fill_opacity = 0.7,
+        )
+        e_pro = VGroup(e_box, e_label)
+
+        log_label = MathTex(r"\mathcal{G}_\text{eff} = \frac{1}{T}\log \mathcal{E}(t_0+T,t_0)")
+        log_box = RoundedRectangle(
+            width=0.3+log_label.width,
+            height=0.3+log_label.height,
+            corner_radius=0.15,
+            color = blue_color,
+            fill_color = light_blue_color,
+            fill_opacity = 0.7,
+        )
+        log_pro = VGroup(log_box, log_label)
+
+        VGroup(e_pro, log_pro).arrange(DOWN, buff = 2.5)
+
+        a1 = Arrow(int_pro.get_right(), e_pro.get_left(), buff = 0, color = black_color)
+
+        a2 = Arrow(e_box.get_bottom(), log_pro.get_top(), buff = 0, color = black_color)
+
+        ch_label = Tex(r"$\mathcal{G}_\text{eff} \overset{?}{=} \mathcal{L}_\text{eff}$")
+        ch_box = RoundedRectangle(
+            width=0.3+ch_label.width,
+            height=0.3+ch_label.height,
+            corner_radius=0.15,
+            color = blue_color,
+            fill_color = light_blue_color,
+            fill_opacity = 0.7,
+        )
+        ch_pro = VGroup(ch_box, ch_label).to_edge(RIGHT, buff = 1.5)
+
+        a3 = Arrow(log_pro.get_right(), ch_pro.get_left(), buff = 0, color = black_color)
+
+        self.play(GrowFromCenter(int_pro))
+        self.next_slide()
+        self.play(GrowFromCenter(e_pro))
+        self.play(Create(a1))
+        self.next_slide()
+        self.play(GrowFromCenter(log_pro))
+        self.play(Create(a2))
+        self.next_slide()
+        self.play(GrowFromCenter(ch_pro))
+        self.play(Create(a3))
+
+        # -----------------------------------------------
+        #       Wolf, Rivas and Hall results
+        # -----------------------------------------------
+
+    
+        self.next_slide()
+        self.fadeout_all()
+
+        title_problem = Title(r'Conditions for Lindbladianity')
         title_problem.underline.color = black_color
 
-        cptp_rect = Rectangle(height = 5.5, width = 9, color = blue_color, fill_color = blue_color, fill_opacity=0.1)
-        cptp_title = Tex(r"$\mathcal{E}$ is CPTP", color = blue_color).scale_to_fit_height(0.35).move_to(cptp_rect.get_top() + 0.35*DOWN)
-        cptp_rect.set_z_index(1)
-        cptp_title.set_z_index(1)
-        cptp_set = VGroup(
-            cptp_title,
-            cptp_rect
-        )
-
-        linbladian_rect = Rectangle(height = 4.25, width = 0.6*11, color = yellow_color, fill_color = yellow_color, fill_opacity=0.1)\
-            .shift(cptp_rect.width/8*RIGHT+0.5*DOWN)
-        linbladian_title = Tex(r"$\mathcal{G}$ is Lindbladian", color = yellow_color).scale_to_fit_height(0.35).move_to(linbladian_rect.get_top() + 0.35*DOWN)
-        linbladian_rect.set_z_index(2)
-        linbladian_title.set_z_index(2)
-        linbladian_set = VGroup(
-            linbladian_title,
-            linbladian_rect
-        )
-
-        TD_rect = Rectangle(height = 3, width = 0.25*11, color = green_color, fill_color = green_color, fill_opacity=0.1)\
-            .shift(cptp_rect.width/8*RIGHT-linbladian_rect.width/4*RIGHT+1*DOWN)
-        TD_title = VGroup(
-            Tex(r"Non-Constant Gen.", color = green_color).scale(0.7),
-            MathTex(r"\mathcal{E}=\mathcal{T}e^{\int d\tau\mathcal{G}(\tau)}", color = green_color).scale(0.9)
-        ).arrange(DOWN, buff = 0.2).scale_to_fit_height(0.8).scale_to_fit_height(0.8).move_to(TD_rect.get_top() + 0.55*DOWN)
-        TD_rect.set_z_index(3)
-        TD_title.set_z_index(3)
-        TD_set = VGroup(
-            TD_title,
-            TD_rect
-        )
-
-        ITD_rect = Rectangle(height = 3, width = 0.25*11, color = green_color, fill_color = green_color, fill_opacity=0.1)\
-            .shift(cptp_rect.width/8*RIGHT+linbladian_rect.width/4*RIGHT+1*DOWN)
-        ITD_title = VGroup(
-            Tex(r"Constant Gen.", color = green_color).scale(0.7),
-            MathTex(r"\mathcal{E}=e^{t\mathcal{L}}", color = green_color)
-        ).arrange(DOWN, buff = 0.2).scale_to_fit_height(0.8).move_to(ITD_rect.get_top() + 0.55*DOWN)
-        ITD_rect.set_z_index(3)
-        ITD_title.set_z_index(3)
-        ITD_set = VGroup(
-            ITD_title,
-            ITD_rect
-        )
-
-        uni_rect = Rectangle(height = 1.5, width = 2, color = red_color, fill_color = red_color, fill_opacity=0.1)\
-            .move_to(ITD_rect).shift(0.5*DOWN)
-        uni_title = Tex(r"Unitary", color = red_color).scale_to_fit_height(0.35).move_to(uni_rect)
-        uni_rect.set_z_index(4)
-        uni_title.set_z_index(4)
-        uni_set = VGroup(
-            uni_title,
-            uni_rect
-        )
-
-        sets = VGroup(cptp_set, linbladian_set, TD_set, ITD_set, uni_set).shift(0.5*DOWN)
-        
-        self.play(Write(title_problem), FadeIn(cptp_set))
-        self.wait(0.3)
-        self.next_slide()
-        self.play(FadeIn(linbladian_set))
-        self.wait(0.3)
-        self.next_slide()
-        self.play(FadeIn(TD_set),FadeIn(ITD_set)) 
-        #self.play(FadeIn(ITD_set))
-        self.wait(0.3)
-        self.next_slide()
-        self.play(FadeIn(uni_set))
-        self.wait(0.3)
-
-        self.next_slide()
-
-        # -----------------------------------------------
-        #      Wolf, Rivas and Hall results
-        # -----------------------------------------------
-
-        self.play(FadeOut(sets))
-
-        lindbladian = MathTex(r"\mathcal{L}[\rho]", 
+        lindbladian = MathTex(r"\mathcal{G}_\text{eff} \overset{?}{=} \mathcal{L}[\rho]", 
                               r"=", 
                               r"-\frac{i}{\hbar}[H,\rho]", 
                               r"+",
@@ -458,6 +550,7 @@ class Bienal(Slide):
             Tex(r"\textbf{[Hall14]}: M. J. W. Hall et al., Phys. Rev. A 89, 042120 (2014)")
         ).arrange(DOWN, aligned_edge = LEFT, buff = 0.2).to_edge(DOWN, buff = 0.15).scale(0.4)
 
+        self.play(Write(title_problem))
         self.play(Write(lindbladian))
 
         self.next_slide()
@@ -536,7 +629,7 @@ class Bienal(Slide):
             Tex(r"Numerical study of a driven two-level system with dissipation").scale(0.8),
             Tex(r"Always HP and TP, but not always CCP").scale(0.8),
         ).arrange(DOWN, buff = 0.2).next_to(title_problem, DOWN, buff = 0.5)
-        schnell_fig = ImageMobject("./assets/schnell.png").scale_to_fit_height(3.5)
+        schnell_fig = ImageMobject("./assets/schnell.png").scale_to_fit_height(4)
         h_S = MathTex(r"H(t) =\frac{\Delta}{2}\sigma_z+E \cos{(\omega t - \phi)}\sigma_x").scale(0.8)
         l_S = MathTex(r"L = \sqrt{\gamma}\sigma_-").scale(0.8)
 
